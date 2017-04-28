@@ -6,8 +6,16 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String [] args){
-        Graph g = new Graph(3);
-        CSP csp = new CSP(g,3);
+        Graph g = new Graph(4);
+        CSP csp = new CSP(g,4);
+        //csp.simpleGoThroughGraphBacktrackingAll(g,0,0);
+        //System.out.println("rozw bt: "+csp.btNum );
+
+        csp.simpleForwardAll(g,0,0);
+        System.out.println("rozw cf: "+csp.fcNum );
+        /*
+
+
         csp.forwardChecking();
 
         csp.simpleGoThroughGraphBacktracking(0,0,0);
@@ -28,7 +36,7 @@ public class Main {
         }
 
 
-
+*/
 
         /*
         Graph gr = new Graph(g);
