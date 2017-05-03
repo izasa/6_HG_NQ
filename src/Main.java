@@ -6,14 +6,22 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String [] args){
-        Graph g = new Graph(4);
-        CSP csp = new CSP(g,4);
+
+
+        NQ nq = new NQ(12);
+        nq.runsSimpleBacktracjking();
+        System.out.println(nq.getSolutions());
+
+
+        //Graph g = new Graph(3);
+        //CSP csp = new CSP(g,3);
         //csp.simpleGoThroughGraphBacktrackingAll(g,0,0);
         //System.out.println("rozw bt: "+csp.btNum );
 
-        csp.simpleForwardAll(g,0,0);
-        System.out.println("rozw cf: "+csp.fcNum );
+        //csp.simpleForwardAll(g,0,0);
+        //System.out.println("rozw cf: "+csp.fcNum );
         /*
+
 
 
         csp.forwardChecking();
@@ -73,11 +81,11 @@ public class Main {
         System.out.println("\nduplikta:");
         for(int i=0;i<list.size(); i++){
             System.out.print(l2.get(i));
-        }
+    }
         System.out.println("\nlista po zmianie w duplikacie:");
         for(int i=0;i<list.size(); i++){
-            System.out.print(list.get(i));
-        }
+        System.out.print(list.get(i));
+    }
         */
     }
 

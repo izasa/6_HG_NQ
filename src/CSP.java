@@ -163,7 +163,7 @@ public class CSP {
     public void simpleForwardAll(Graph g, int rowNum, int colNum){
         Graph currentGraph = new Graph(g, g.getDomains());
         ArrayList<Vector> deletedDomains = new ArrayList<>();
-        ArrayList<ColorPair> pairs = new ArrayList<>();
+        ArrayList<ColorPair> pairs;
         int tmpRowNum = rowNum;
         int tmpColNum = colNum;
         if(colNum==N-1){
@@ -191,6 +191,9 @@ public class CSP {
     }
 
     public void updateAllDomains(Graph g, ArrayList<Vector> deletedDomains){
+
+        //TODO : Uproscic sprawdzanie wg sasiadow nie wg wszystkich kolorow
+
         HashMap<String,ArrayList<Integer>> newDomains = new HashMap<>();
         initAllDomains(g,newDomains);
         boolean deleted = false;
