@@ -11,6 +11,7 @@ public class NQ
     private Boolean [] cols;
     private int solutions =0;
     private ArrayList<ArrayList<Integer>> domains = new ArrayList<>();
+    private Boolean [][] board;
 
     public NQ(int n) {
         this.N = n;
@@ -27,22 +28,17 @@ public class NQ
     }
 
     public void simpleBacktracking(int rowNum, Boolean[] diagLeft, Boolean []diagRight, Boolean [] cols){
-        //System.out.println("sb");
         Boolean [] currLeft = copyDiag(diagLeft);
         Boolean [] currRight = copyDiag(diagRight);
         Boolean [] currCols = copyTable(cols);
         if(rowNum<N){
             for(int i=0; i<N; i++){// iteruje po kolumnach
                 if(setQueenIfPosssible(rowNum,i, currCols, currRight,currLeft)){
-                    //System.out.println("dodano");
                     simpleBacktracking(rowNum+1,currLeft,currRight,currCols);
                     if(rowNum==N-1){
-                        //System.out.println("rozw");
                         solutions++;
                     }
                     removeConstraints(rowNum,i, currCols, currRight,currLeft);
-                }else{
-                   // System.out.println("nie dodano");
                 }
             }
         }
@@ -63,7 +59,6 @@ public class NQ
 
     public void initDomains(){
         for(int i=0; i<N;i++){
-            domains.add(new ArrayList<Integer>());
             ArrayList tmp = new ArrayList();
             for(int j=0;j<N; j++){
                 tmp.add(j);
@@ -72,13 +67,20 @@ public class NQ
         }
     }
 
+    public void initBoards(){
+        board = new Boolean[N][N];
+        for(int i=0; i<N;i++){
+            for(int j=0;j<N; j++){
+                board[i][j] = new Boolean(false);
+            }
+        }
+    }
+
     public boolean setQueenIfPosssible(int rownum, int colnum, Boolean [] cols, Boolean [] diagRight, Boolean [] diagLeft){
-        //System.out.println("colnum: "+colnum+" rownum: "+rownum+ " cols[colnum]: "+cols[colnum]+ " diagRight[rownum+colnum] "+diagRight[rownum+colnum] + " diagLeft[N-1+colnum-rownum] "+diagLeft[N-1+colnum-rownum]);
         if( cols[colnum]==false && diagRight[rownum+colnum]==false && diagLeft[N-1+colnum-rownum]==false){
             cols[colnum]=true;
             diagRight[rownum+colnum]=true;
             diagLeft[N-1+colnum-rownum]=true;
-            //System.out.println("true");
             return true;
         }
         return false;
@@ -107,12 +109,70 @@ public class NQ
         diagLeft[N-1+colnum-rownum]=false;
     }
 
-    public void runFrowardchecking(){
-        initDomains();
 
+    public void runFrowardcheckingB(){
+        initBoards();
+        forwardchecking(0, diagLeft,diagRight,cols,board);
     }
 
-    public void forwardchecking(int rowNum){
 
+    public void forwardchecking(int rowNum, Boolean[] diagLeft, Boolean []diagRight, Boolean [] cols, Boolean [][] domains){
+        Boolean [] currLeft = copyDiag(diagLeft);
+        Boolean [] currRight = copyDiag(diagRight);
+        Boolean [] currCols = copyTable(cols);
+        Boolean[][] currDom = domains;
+        if(rowNum<N){
+                for (int j = 0; j < currDom.length; j++) { // ust ze zajete miejsce
+                    if (currDom[rowNum][j] == false) { // jezeli dane pole jest w domenie
+                        currCols[j] = true;
+                        currRight[rowNum + j] = true;
+                        currLeft[N - 1 + j - rowNum] = true;
+                        currDom[rowNum][j] = true;
+                        if (rowNum + 1 == N) {
+                            solutions++;
+                        } else {
+                            forwardchecking(rowNum + 1, currLeft, currRight, currCols, setNewDomainsB(currDom, currCols, currRight, currLeft));
+
+                        }
+                        currDom[rowNum][j] = false;
+                        currCols[j] = false;
+                        currRight[rowNum + j] = false;
+                        currLeft[N - 1 + j - rowNum] = false;
+                    }
+                }
+
+        }
     }
+
+
+    public ArrayList<ArrayList<Integer>> copyDomains(ArrayList<ArrayList<Integer>> dom){
+        ArrayList<ArrayList<Integer>> newDom = new ArrayList<>();
+        for(int i=0; i<N; i++){
+            ArrayList tmp = new ArrayList();
+            for(int j=0; j<dom.get(i).size(); j++){
+                tmp.add(new Integer(dom.get(i).get(j)));
+            }
+            newDom.add(tmp);
+        }
+        return newDom;
+    }
+
+
+    public Boolean [][] setNewDomainsB(Boolean[][] oldDom, Boolean [] cols, Boolean [] diagRight, Boolean [] diagLeft){
+        Boolean [][] newB = new Boolean[N][N];
+        for(int i=0; i<N; i++){//iteracja po wierszach
+            for(int j=0; j<N; j++){ //iter po kolumnach
+                if(oldDom[i][j] ||(cols[j] || diagRight[i+j] ||
+                        diagLeft[N-1+j-i])){
+                    newB[i][j] = new Boolean(true);
+                }else{
+                    newB[i][j] = new Boolean(false);
+                }
+            }
+
+        }
+        return newB;
+    }
+
+
 }

@@ -8,9 +8,13 @@ public class Main {
     public static void main(String [] args){
 
 
-        NQ nq = new NQ(12);
-        nq.runsSimpleBacktracjking();
+        NQ nq = new NQ(9);
+        //nq.runsSimpleBacktracjking();
+        nq.runFrowardcheckingB();
         System.out.println(nq.getSolutions());
+
+
+
 
 
         //Graph g = new Graph(3);
@@ -43,50 +47,7 @@ public class Main {
             System.out.println();
         }
 
-
 */
-
-        /*
-        Graph gr = new Graph(g);
-        System.out.println("skopiowany: ");
-        for(int i =0; i<3; i++){
-            for(int j=0; j<3;j++){
-                System.out.print(gr.getGraph()[i][j].toString()+" ");
-            }
-            System.out.println();
-        }
-        gr.setNodeColor(0,0,5);
-        gr.setNodeColor(0,1,5);
-        gr.setNodeColor(0,2,5);
-        System.out.println(" autentyk po zmianie kopii : ");
-        for(int i =0; i<3; i++){
-            for(int j=0; j<3;j++){
-                System.out.print(g.getGraph()[i][j].toString()+" ");
-            }
-            System.out.println();
-        }
-
-        ArrayList list = new ArrayList();
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        System.out.println("\nlista:");
-        for(int i=0;i<list.size(); i++){
-            System.out.print(list.get(i));
-        }
-        ArrayList l2 = new ArrayList(list);
-        l2.add(2,6);
-        System.out.println("\nduplikta:");
-        for(int i=0;i<list.size(); i++){
-            System.out.print(l2.get(i));
-    }
-        System.out.println("\nlista po zmianie w duplikacie:");
-        for(int i=0;i<list.size(); i++){
-        System.out.print(list.get(i));
-    }
-        */
     }
 
 }
