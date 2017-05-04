@@ -10,6 +10,7 @@ public class CSP {
     public Graph graphF;
     private HashMap<Integer,Integer> colorNumbers = new HashMap<>();// zbior <kolor,ilosc wystapien>
     private ArrayList<Integer> colors = new ArrayList<>();
+     ArrayList<Position> positions = new ArrayList<>();
     private int N;
     public int btNum =0;
     public int fcNum =0;
@@ -19,7 +20,29 @@ public class CSP {
         this.graph = graph;
         this.N=N;
         initColors();
+        initPositions();
+    }
 
+
+    public void initPositions(){
+        float center = (N-1)/2.f;
+        //positions.clear();
+        double floorX;
+        double floorY;
+        for (int row = 0; row<N; ++row) {
+            for (int col = 0; col < N; ++col){
+                floorX = new Double(0.0);
+                floorY = new Double(0.0);
+                floorX = Math.floor(Math.abs(center - col));
+                int xDist = (int) floorX;
+                floorY = Math.floor(Math.abs(center - row));
+                int yDist = (int) floorY;
+
+                int dist = xDist + yDist;
+                positions.add(new Position(row,col,dist));
+            }
+        }
+        Collections.sort(positions);
     }
 
 
@@ -96,6 +119,29 @@ public class CSP {
         }
     }
 
+
+
+    public void simpleGoThroughGraphBacktrackingAllCenter(Graph g, int positionPointer){
+        Graph currentGraph = new Graph(g,g.getDomains());
+        int colNum =positions.get(positionPointer).colNum;
+        int rowNum=positions.get(positionPointer).rowNum;
+        for(Integer col: colors){
+            ArrayList<ColorPair> pairs = new ArrayList<>();
+            currentGraph.setNodeColor(rowNum,colNum,col);
+            if(checkContraintsAround(currentGraph,rowNum,colNum,col)){
+                pairs = addUsedColorPairAround(currentGraph,rowNum,colNum,col);
+                if(positionPointer+1<positions.size()){// gdy to nie koniec grafu
+                    simpleGoThroughGraphBacktrackingAllCenter(currentGraph,positionPointer+1);
+                }else{
+                    btNum++;
+                }
+                removeColorsPairs(pairs,currentGraph);
+            }
+
+        }
+    }
+
+
     private void removeColorsPairs(ArrayList<ColorPair> pairs, Graph g){
         if(pairs.size()!=0){
             for(ColorPair cp: pairs){
@@ -119,6 +165,52 @@ public class CSP {
             }
         }
         return true;
+    }
+
+
+    private boolean checkContraintsAround(Graph g,int rowNum, int colNum, int value){
+        if(colNum!=0) {
+            if (g.getNodeColor(rowNum, colNum - 1) == value ||
+                    g.isPairOfColorUsed(g.getNodeColor(rowNum, colNum - 1), value)) {
+                return false;
+            }
+        }
+        if(rowNum!=0){
+            if(g.getNodeColor(rowNum-1,colNum)==value ||
+                    g.isPairOfColorUsed(g.getNodeColor(rowNum-1,colNum),value)){
+                return false;
+            }
+        }
+        if(rowNum+1<N){
+            if(g.getNodeColor(rowNum+1,colNum)==value ||
+                    g.isPairOfColorUsed(g.getNodeColor(rowNum+1,colNum),value)){
+                return false;
+            }
+        }
+        if(colNum+1<N) {
+            if (g.getNodeColor(rowNum, colNum + 1) == value ||
+                    g.isPairOfColorUsed(g.getNodeColor(rowNum, colNum + 1), value)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private ArrayList<ColorPair> addUsedColorPairAround(Graph g, int rowNum, int colNum, int color){
+        ArrayList<ColorPair> pairs=  new ArrayList<>();
+        if(colNum!=0 && g.getNodeColor(rowNum,colNum - 1)!=-1) {
+            pairs.add(g.addColorPair(g.getNodeColor(rowNum,colNum - 1),color));
+        }
+        if(rowNum!=0 && g.getNodeColor(rowNum-1,colNum)!= -1){
+            pairs.add(g.addColorPair(g.getNodeColor(rowNum-1,colNum),color));
+        }
+        if(rowNum+1<N && g.getNodeColor(rowNum+1,colNum)!= -1){
+            pairs.add(g.addColorPair(g.getNodeColor(rowNum+1,colNum),color));
+        }
+        if(colNum+1<N && g.getNodeColor(rowNum,colNum + 1)!=-1) {
+            pairs.add(g.addColorPair(g.getNodeColor(rowNum,colNum + 1),color));
+        }
+        return  pairs;
     }
 
 

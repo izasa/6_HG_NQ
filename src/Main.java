@@ -8,13 +8,17 @@ public class Main {
     public static void main(String [] args){
 
 
-        NQ nq = new NQ(9);
+        //NQ nq = new NQ(9);
         //nq.runsSimpleBacktracjking();
-        nq.runFrowardcheckingB();
-        System.out.println(nq.getSolutions());
+        //nq.runFrowardcheckingB();
+        //System.out.println(nq.getSolutions());
 
-
-
+        Graph g = new Graph(4);
+        CSP csp = new CSP(g,4);
+        csp.simpleGoThroughGraphBacktrackingAllCenter(g,0);
+        //csp.simpleGoThroughGraphBacktrackingAll(g,0,0);
+        System.out.println("romiar positins: "+csp.positions.size());
+        System.out.println("rozw bt: "+csp.btNum );
 
 
         //Graph g = new Graph(3);

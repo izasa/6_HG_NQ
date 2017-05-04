@@ -169,7 +169,6 @@ public class NQ
                     newB[i][j] = new Boolean(false);
                 }
             }
-
         }
         return newB;
     }
