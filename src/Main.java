@@ -15,10 +15,10 @@ public class Main {
 
         Graph g = new Graph(4);
         CSP csp = new CSP(g,4);
-        csp.simpleGoThroughGraphBacktrackingAllCenter(g,0);
+        //csp.simpleGoThroughGraphBacktrackingAllCenter(g,0);
         //csp.simpleGoThroughGraphBacktrackingAll(g,0,0);
-        System.out.println("romiar positins: "+csp.positions.size());
-        System.out.println("rozw bt: "+csp.btNum );
+        csp.simpleForwardAllCenter(g,0);
+        System.out.println("rozw fc: "+csp.fcNum );
 
 
         //Graph g = new Graph(3);

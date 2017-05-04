@@ -56,7 +56,7 @@ public class CSP {
         }
     }
 
-
+/*
     public boolean simpleGoThroughGraphBacktracking(int rowNum, int colNum,int oldColor){
         boolean success = false;
         int value = oldColor;
@@ -93,7 +93,7 @@ public class CSP {
             return true;
         }
     }
-
+*/
 
     public void simpleGoThroughGraphBacktrackingAll(Graph g, int rowNum, int colNum){
         Graph currentGraph = new Graph(g,g.getDomains());
@@ -227,10 +227,10 @@ public class CSP {
 
     public void forwardChecking(){
         Graph g = new Graph(N);
-        simpleForward(g,0,0,0);
+       // simpleForward(g,0,0,0);
     }
 
-
+/*
     private boolean simpleForward(Graph g, int rowNum, int colNum, int domColIndex){
         Graph currentGraph = new Graph(g, g.getDomains());
         ArrayList<Vector> deletedDomains = new ArrayList<>();
@@ -251,7 +251,7 @@ public class CSP {
         }
         return simpleForward(currentGraph, rowNum,colNum,0);
     }
-
+*/
     public void simpleForwardAll(Graph g, int rowNum, int colNum){
         Graph currentGraph = new Graph(g, g.getDomains());
         ArrayList<Vector> deletedDomains = new ArrayList<>();
@@ -270,6 +270,32 @@ public class CSP {
                 updateAllDomains(currentGraph,deletedDomains);
                 if(!(rowNum == N-1 && colNum==N-1)){// gdy to nie koniec grafu
                     simpleForwardAll(currentGraph,tmpRowNum,tmpColNum);
+                }else{
+                    fcNum++;
+                }
+                removeColorsPairs(pairs,currentGraph);
+                restoreDomains(currentGraph,deletedDomains);
+                deletedDomains.clear();
+            }
+
+        }
+
+    }
+
+
+    public void simpleForwardAllCenter(Graph g,int positionPointer){
+        Graph currentGraph = new Graph(g, g.getDomains());
+        ArrayList<Vector> deletedDomains = new ArrayList<>();
+        ArrayList<ColorPair> pairs;
+        int rowNum = positions.get(positionPointer).rowNum;
+        int colNum = positions.get(positionPointer).colNum;
+        if(! currentGraph.getDomains().isEmpty()){
+            for(Integer color: currentGraph.getDomains().get(rowNum+"-"+colNum)){
+                currentGraph.setNodeColor(rowNum,colNum,color);
+                pairs = addUsedColorPairAround(currentGraph, rowNum,colNum,color);
+                updateAllDomains(currentGraph,deletedDomains);
+                if(positionPointer+1<positions.size()){// gdy to nie koniec grafu
+                    simpleForwardAllCenter(currentGraph,positionPointer+1);
                 }else{
                     fcNum++;
                 }
