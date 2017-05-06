@@ -1,0 +1,6 @@
+/out/
+
+# User-specific stuff:
+.idea/**/workspace.xml
+.idea_modules/
+SI_Zad2_CSP.iml
